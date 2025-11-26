@@ -320,6 +320,7 @@ void rating()
 
 int main()
 {
+    cout << " ВІТАЄМО: \n";
     cout << " ДОДАТОК ТАКСІ\n";
 
     User user = registration();
