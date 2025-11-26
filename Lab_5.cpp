@@ -45,32 +45,52 @@ Driver availableDrivers[10] =
 const int NUM_DRIVERS = 10; // rонстанта для розміру масиву
 
 
-// реєстрація користувача
+void setupUkr()
+{
+    SetConsoleOutputCP(1251);
+    SetConsoleCP(1251);
+    setlocale(LC_ALL, "Ukrainian");
+    srand(time(0));
+}
+
+// робимо логін нечутливим до регістру
+string toLower(string s)
+{
+    for (char& c : s) c = tolower(c);
+    return s;
+}
+
+// реєстрація + перевірка порожніх полів (fix RegistrationEmptyFieldsTest)
 User registration()
 {
     User u;
-    cout << "=== Реєстрація ===\n";
-    cout << "Ім'я: "; getline(cin, u.name);
-    cout << "Логін: "; getline(cin, u.login);
-    cout << "Пароль: "; getline(cin, u.password);
-    cout << "\nРеєстрація успішна!\n\n";
-    return u;
-}
 
-// авторизація
-bool login(const User& u)
-{
-    string l, p;
-    cout << "=== Вхід ===\n";
-    cout << "Логін: "; getline(cin, l);
-    cout << "Пароль: "; getline(cin, p);
-    if (l == u.login && p == u.password)
-    {
-        cout << "\nАвторизація успішна!\n";
-        return true;
-    }
-    cout << "Помилка входу!\n";
-    return false;
+    cout << "=== Реєстрація ===\n";
+
+    do {
+        cout << "Ім'я: ";
+        getline(cin, u.name);
+        if (u.name.empty()) cout << "Поля не можуть бути порожніми!\n";
+    } while (u.name.empty());
+
+    do {
+        cout << "Логін: ";
+        getline(cin, u.login);
+        if (u.login.empty()) cout << "Поля не можуть бути порожніми!\n";
+    } while (u.login.empty());
+
+    do {
+        cout << "Пароль: ";
+        getline(cin, u.password);
+        if (u.password.empty()) cout << "Поля не можуть бути порожніми!\n";
+    } while (u.password.empty());
+
+    cout << "\nРеєстрація успішна!\n\n";
+
+    // зберігаємо логін у нижньому регістрі
+    u.login = toLower(u.login);
+
+    return u;
 }
 
 // оформлення замовлення
