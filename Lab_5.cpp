@@ -16,7 +16,7 @@ struct Driver
 
 struct User
 {
-    string name, login, password;
+    string name, logini, passwordi;
 };
 
 struct Order
@@ -51,8 +51,8 @@ User registration()
     User u;
     cout << "=== Реєстрація ===\n";
     cout << "Ім'я: "; getline(cin, u.name);
-    cout << "Логін: "; getline(cin, u.login);
-    cout << "Пароль: "; getline(cin, u.password);
+    cout << "Логін: "; getline(cin, u.logini);
+    cout << "Пароль: "; getline(cin, u.passwordi);
     cout << "\nРеєстрація успішна!\n\n";
     return u;
 }
@@ -64,7 +64,7 @@ bool login(const User& u)
     cout << "=== Вхід ===\n";
     cout << "Логін: "; getline(cin, l);
     cout << "Пароль: "; getline(cin, p);
-    if (l == u.login && p == u.password)
+    if (l == u.logini && p == u.passwordi)
     {
         cout << "\nАвторизація успішна!\n";
         return true;
