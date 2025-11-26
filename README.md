@@ -2,4 +2,4 @@
 ## Avthors
 ### Vlad Datsenko
 ### Vlad Dumik
-### Nazar Burlai
+### Nazar Burlay
