@@ -16,7 +16,7 @@ struct Driver
 
 struct User
 {
-    string name, login, password;
+    string name, logini, passwordi;
 };
 
 struct Order
@@ -302,8 +302,8 @@ void rating()
 {
     int score;
     string comment;
-    cout << "\n Оцінка поїздки \n";
-    cout << "Оцінка (1–5): ";
+    cout << "\n Оцінка поїздки  \n";
+    cout << "Оцінка (1 – 5): ";
 
     while (!(cin >> score) || score < 1 || score > 5)
     {
@@ -320,6 +320,7 @@ void rating()
 
 int main()
 {
+    int a;
     cout << " ВІТАЄМО: \n";
     cout << " ДОДАТОК ТАКСІ\n";
 
