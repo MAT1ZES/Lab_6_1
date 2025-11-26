@@ -45,32 +45,52 @@ Driver availableDrivers[10] =
 const int NUM_DRIVERS = 10; // rонстанта для розміру масиву
 
 
-// реєстрація користувача
+void setupUkr()
+{
+    SetConsoleOutputCP(1251);
+    SetConsoleCP(1251);
+    setlocale(LC_ALL, "Ukrainian");
+    srand(time(0));
+}
+
+// робимо логін нечутливим до регістру
+string toLower(string s)
+{
+    for (char& c : s) c = tolower(c);
+    return s;
+}
+
+// реєстрація + перевірка порожніх полів (fix RegistrationEmptyFieldsTest)
 User registration()
 {
     User u;
-    cout << "=== Реєстрація ===\n";
-    cout << "Ім'я: "; getline(cin, u.name);
-    cout << "Логін: "; getline(cin, u.logini);
-    cout << "Пароль: "; getline(cin, u.passwordi);
-    cout << "\nРеєстрація успішна!\n\n";
-    return u;
-}
 
-// авторизація
-bool login(const User& u)
-{
-    string l, p;
-    cout << "=== Вхід ===\n";
-    cout << "Логін: "; getline(cin, l);
-    cout << "Пароль: "; getline(cin, p);
-    if (l == u.logini && p == u.passwordi)
-    {
-        cout << "\nАвторизація успішна!\n";
-        return true;
-    }
-    cout << "Помилка входу!\n";
-    return false;
+    cout << "=== Реєстрація ===\n";
+
+    do {
+        cout << "Ім'я: ";
+        getline(cin, u.name);
+        if (u.name.empty()) cout << "Поля не можуть бути порожніми!\n";
+    } while (u.name.empty());
+
+    do {
+        cout << "Логін: ";
+        getline(cin, u.login);
+        if (u.login.empty()) cout << "Поля не можуть бути порожніми!\n";
+    } while (u.login.empty());
+
+    do {
+        cout << "Пароль: ";
+        getline(cin, u.password);
+        if (u.password.empty()) cout << "Поля не можуть бути порожніми!\n";
+    } while (u.password.empty());
+
+    cout << "\nРеєстрація успішна!\n\n";
+
+    // зберігаємо логін у нижньому регістрі
+    u.login = toLower(u.login);
+
+    return u;
 }
 
 // оформлення замовлення
@@ -209,22 +229,48 @@ cout << "\nВаше замовлення підтверджено!\n";
 void payment(double price)
 {
     int method;
-    cout << "\n Оплата \n";
-    cout << "Сума до сплати: " << fixed << setprecision(2) << price << " грн\n";
-    cout << "Оберіть спосіб оплати:\n1 - Картка\n2 - Готівка\nВаш вибір: ";
+
+    cout << "\n=== Оплата ===\n";
+    cout << "Сума: " << price << " грн\n";
+    cout << "1 - Картка\n2 - Готівка\n";
 
     while (!(cin >> method) || (method != 1 && method != 2))
     {
-        cout << "Невірний вибір! Оберіть 1 або 2: ";
+        cout << "Помилка! Введіть 1 або 2: ";
         cin.clear();
-        string dummy;
-        getline(cin, dummy);
+        cin.ignore(1000, '\n');
     }
-
+    // ======= ОПЛАТА КАРТКОЮ =======
     if (method == 1)
     {
+        string cardNumber;
+        cout << "Введіть номер картки (16 цифр): ";
+        cin >> cardNumber;
+
+        // Валідація номера картки (Тест 3)
+        if (cardNumber.length() != 16  != all_of(cardNumber.begin(), cardNumber.end(), ::isdigit))
+        {
+            cout << "Некоректний номер картки! Додавання неможливе.\n";
+            return;
+        }
+
+        // Перевірка балансу (Тест 2)
+        double cardBalance;
+        cout << "Введіть баланс картки: ";
+        cin >> cardBalance;
+
+        if (cardBalance < price)
+        {
+            cout << "Недостатньо коштів!\n";
+            cout << "Оберіть інший спосіб оплати.\n";
+            return;
+        }
+
         cout << "Оплата карткою успішна.\n";
+        return;
     }
+
+    // ======= ОПЛАТА ГОТІВКОЮ =======
     else if (method == 2)
     {
         double cash;
@@ -234,23 +280,20 @@ void payment(double price)
         {
             cout << "Некоректна сума. Введіть додатне число: ";
             cin.clear();
-            string dummy;
-            getline(cin, dummy);
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
 
         if (cash < price)
         {
             cout << "Недостатньо коштів! Оплата не виконана.\n";
-            cin.ignore();
             return;
+        
         }
 
         double change = cash - price;
         cout << "Оплата готівкою прийнята.\n";
         cout << "Ваша решта: " << fixed << setprecision(2) << change << " грн\n";
     }
-
-    cin.ignore();
 }
 
 
